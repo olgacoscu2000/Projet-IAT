@@ -19,7 +19,7 @@ def getURL(filename):
 
 class SpaceInvaders():
 
-    NO_INVADERS = 1 # Nombre d'aliens  
+    NO_INVADERS = 3 # Nombre d'aliens  
     
     def __init__(self, display : bool = False):
         # player
@@ -86,8 +86,21 @@ class SpaceInvaders():
         Cette méthode doit renvoyer l'état du système comme vous aurez choisi de
         le représenter. Vous pouvez utiliser les accesseurs ci-dessus pour cela. 
         """
-        minInvY=self.invader_Y.index(min(self.invader_Y))
-        self.state = [min(self.invader_Y), self.invader_X[minInvY]-self.player_X]
+
+        #position disrcete du ivader et du player et la direction du invader
+        print(max(self.get_indavers_Y()))
+        Gn_w=self.screen_width/(self.playerImage.get_width()+1.7)
+        Gn_h=self.screen_height/50
+
+        p_w=int(self.get_player_X()/(self.playerImage.get_width()+1.7))
+        i_w=int(max(self.get_indavers_X())/(self.playerImage.get_width()+1.7))
+        i_h=int(max(self.get_indavers_Y())/Gn_h)
+
+
+        minInvY=self.invader_Y.index(max(self.invader_Y))
+        direction = self.invader_Ychange[minInvY]
+        self.state = [i_h, i_w, p_w, direction] 
+        #[carré vertical invader, carré horizontal invader, carré horizontal player, direction invader]
         return self.state
 
     def reset(self):

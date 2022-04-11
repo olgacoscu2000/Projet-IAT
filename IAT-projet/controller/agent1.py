@@ -1,3 +1,4 @@
+from ctypes import sizeof
 import pandas as pd
 import pygame
 import random
@@ -14,7 +15,29 @@ from epsilon_profile import EpsilonProfile
 class agent1():
     def __init__(self, space: SpaceInvaders, eps_profile: EpsilonProfile, gamma: float, alpha: float):
         # Initialise la fonction de valeur Q
-        self.Q = np.zeros([space.state, space.na])
+        minInvY=space.get_indavers_Y().index(max(space.invader_Y))
+        print("min", minInvY)
+        self.Gn_w=int(space.screen_width/(space.playerImage.get_width()+1.7))
+        self.Gn_h=int(space.screen_height/50)
+        self.p_w=int(space.get_player_X()/(space.playerImage.get_width()+1.7))
+        self.i_w=int(space.get_indavers_X()[minInvY]/(space.playerImage.get_width()+1.7))
+        self.i_h=int(max(space.get_indavers_Y())/self.Gn_h)
+
+        print("paso horizontal", space.playerImage.get_width()+1.7)
+        self.direction = int(space.invader_Xchange[minInvY])
+
+        print("ih",self.i_h)
+        print(self.i_w)
+        print(self.p_w)
+        print(self.direction)
+        print(self.Gn_h)
+        print(self.Gn_w)
+
+
+
+        
+        self.Q = np.zeros([self.Gn_h,self.Gn_w, self.Gn_h, 2, 4])
+        print("apres 0: ",self.Q)
 
         self.space = space
         self.na = space.na
@@ -25,11 +48,29 @@ class agent1():
         self.eps_profile = eps_profile
         self.epsilon = self.eps_profile.initial
 
-        self.qvalues = pd.DataFrame(data={'episode': [], 'value': []})
-        self.values = pd.DataFrame(data={'ix': [space.invader_X], 'iy': [space.invader_Y], 'px': [space.player_X]})
 
-    def q_learn(self, env, n_episodes, max_steps):
+
+
+        self.qvalues = pd.DataFrame(data={'episode': [], 'value': []})
+        self.values = pd.DataFrame(data={'iy': [self.i_h], 'ix': [self.i_w], 'px': [self.p_w], 'dir': [self.direction]})
+
+    def learn(self, env, n_episodes, max_steps):
+        """Cette méthode exécute l'algorithme de q-learning. 
+        Il n'y a pas besoin de la modifier. Simplement la comprendre et faire le parallèle avec le cours.
+
+        :param env: L'environnement 
+        :type env: gym.Envselect_action
+        :param num_episodes: Le nombre d'épisode
+        :type num_episodes: int
+        :param max_num_steps: Le nombre maximum d'étape par épisode
+        :type max_num_steps: int
+
+        # Visualisation des données
+        Elle doit proposer l'option de stockage de (i) la fonction de valeur & (ii) la Q-valeur 
+        dans un fichier de log
+        """
         n_steps = np.zeros(n_episodes) + max_steps
+        
         # Execute N episodes 
         for episode in range(n_episodes):
             # Reinitialise l'environnement
@@ -50,6 +91,7 @@ class agent1():
                 state = next_state
             # Mets à jour la valeur du epsilon
             self.epsilon = max(self.epsilon - self.eps_profile.dec_episode / (n_episodes - 1.), self.eps_profile.final)
+
             # Sauvegarde et affiche les données d'apprentissage
             if n_episodes >= 0:
                 state = env.reset()
@@ -68,7 +110,11 @@ class agent1():
         :param reward: La récompense perçue
         :param next_state: L'état suivant
         """
+        print("etat: ",state)
+        print("action: ",action)
+        print("Q: ", self.Q.shape)
         self.Q[state][action] = (1. - self.alpha) * self.Q[state][action] + self.alpha * (reward + self.gamma * np.max(self.Q[next_state]))
+        print(sum(self.Q))
 
 
     def select_action(self, state : 'list[int, int]'):
