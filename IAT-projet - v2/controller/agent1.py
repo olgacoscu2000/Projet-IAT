@@ -77,23 +77,32 @@ class agent1():
                 # Selectionne une action 
                 action = self.select_action(state)
                 # Echantillonne l'état suivant et la récompense
-                next_state, reward, terminal = env.step(action)
+                next_state, reward, terminal, score_val = env.step(action)
                 # Mets à jour la fonction de valeur Q
                 self.updateQ(state, action, reward, next_state)
                 
                 if terminal:
-                    n_steps[episode] = step + 1  
+                    n_steps[episode] = step + 1
+                    step = max_steps  
                     break
-
+                
                 state = next_state
             # Mets à jour la valeur du epsilon
             self.epsilon = max(self.epsilon - self.eps_profile.dec_episode / (n_episodes - 1.), self.eps_profile.final)
+            """sumatoria = 0
+            elementos = 0
+            for fila in self.Q:
+                for elemento in fila:
+                    sumatoria += elemento
+                    elementos += 1
+
+            Qmean = sumatoria / elementos"""
 
             # Sauvegarde et affiche les données d'apprentissage
             if n_episodes >= 0:
-                print("#> Ep. {}/{} Value {}".format(episode, n_episodes, reward))
+                print("#> Ep. {}/{} Value {}".format(episode, n_episodes, score_val))
                 state = env.reset()
-                #self.save_log(env, episode)
+                self.save_log(env, episode)
 
         self.values.to_csv('partie_3/visualisation/logV.csv')
         self.qvalues.to_csv('partie_3/visualisation/logQ.csv')
@@ -143,11 +152,11 @@ class agent1():
         
         state = env.reset()
         # Construit la fonction de valeur d'état associée à Q
-        V = np.zeros([self.Gn_h+100,self.Gn_w+100, self.Gn_h+100, 2, 4])
+        """V = np.zeros([self.Gn_h+100,self.Gn_w+100, self.Gn_h+100, 2, 4])
         for state in self.space.get_state():
             val = self.Q[state][self.select_action(state)]
-            V[state] = val
+            V[state] = val"""
 
         self.qvalues = self.qvalues.append({'episode': episode, 'value': self.Q[state][self.select_greedy_action(state)]}, ignore_index=True)
-        self.values = self.values.append({'episode': episode, 'value': np.reshape(V,(1, self.i_h*self.i_w*self.p_w*self.direction))[0]},ignore_index=True)
-        #'iy': [self.i_h], 'ix': [self.i_w], 'px': [self.p_w], 'dir': [self.direction]"""
+        #self.values = self.values.append({'episode': episode, 'value': np.reshape(V,(1, self.i_h*self.i_w*self.p_w*self.direction))[0]},ignore_index=True)"""
+        #'iy': [self.i_h], 'ix': [self.i_w], 'px': [self.p_w], 'dir': [self.direction]

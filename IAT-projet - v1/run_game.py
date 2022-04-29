@@ -16,8 +16,8 @@ def main():
     gamma= 1.
     alpha = 0.001
     eps_profile = EpsilonProfile(1.0, 0.1)
-    n_episodes = 2000
-    max_steps = 500
+    n_episodes = 100
+    max_steps = 10000
 
     controller = agent1(game,eps_profile, gamma, alpha)
     print("On commence!")
@@ -25,7 +25,7 @@ def main():
 
     controller.learn(game, n_episodes, max_steps)
 
-    print("on reset")
+    #print("on reset")
     state = game.reset()
     while True:
         action = controller.select_action(state)

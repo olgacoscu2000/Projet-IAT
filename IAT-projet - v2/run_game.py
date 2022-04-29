@@ -16,8 +16,8 @@ def main():
     gamma= 1.
     alpha = 0.01
     eps_profile = EpsilonProfile(1.0, 0.1)
-    n_episodes = 2000
-    max_steps = 5000
+    n_episodes = 100
+    max_steps = 10000
 
     controller = agent1(game,eps_profile, gamma, alpha)
     print("On commence!")

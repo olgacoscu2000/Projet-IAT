@@ -16,7 +16,7 @@ class agent1():
     def __init__(self, space: SpaceInvaders, eps_profile: EpsilonProfile, gamma: float, alpha: float):
         # Initialise la fonction de valeur Q
         minInvY=space.get_indavers_Y().index(max(space.invader_Y))
-        print("minvy: ", minInvY)
+        #print("minvy: ", minInvY)
         #print("min", minInvY)
         #self.dmax=1000 #math.sqrt(space.screen_height^2+space.screen_width^2)
         #1000/70 = 14.3 => on definit 15 carres.
@@ -35,7 +35,7 @@ class agent1():
         self.eps_profile = eps_profile
         self.epsilon = self.eps_profile.initial
 
-        s = (50,2, 4)
+        s = (40,2, 4)
         self.Q = np.zeros(s)
         #print("apres 0: ",self.Q)
 
@@ -69,7 +69,7 @@ class agent1():
                 # Selectionne une action 
                 action = self.select_action(state)
                 # Echantillonne l'état suivant et la récompense
-                next_state, reward, terminal = env.step(action)
+                next_state, reward, terminal, score = env.step(action)
                 # Mets à jour la fonction de valeur Q
                 self.updateQ(state, action, reward, next_state)
                 
@@ -84,6 +84,7 @@ class agent1():
             # Sauvegarde et affiche les données d'apprentissage
             if n_episodes >= 0:
                 state = env.reset()
+                print(score)
                 #print("\r#> Ep. {}/{} Value {}".format(episode, n_episodes, self.Q[state][self.select_greedy_action(state)]), end =" ")
                 #self.save_log(env, episode)
 
@@ -99,14 +100,14 @@ class agent1():
         :param reward: La récompense perçue
         :param next_state: L'état suivant
         """
-        print("etat: ",state)
+        """print("etat: ",state)
         print("action: ",action)
         print("direction: ", self.direction)
         print("distance: ", self.distance)
         
         print("Q: ", self.Q.shape)
         print("Q[0]: ", self.Q[0])
-        print("Q[state][action]: ", self.Q[state][action])
+        print("Q[state][action]: ", self.Q[state][action])"""
 
         self.Q[state][action] = (1. - self.alpha) * self.Q[state][action] + self.alpha * (reward + self.gamma * np.max(self.Q[next_state]))
         #print(sum(self.Q))

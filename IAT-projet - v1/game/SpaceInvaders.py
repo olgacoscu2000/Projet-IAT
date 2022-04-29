@@ -19,7 +19,7 @@ def getURL(filename):
 
 class SpaceInvaders():
 
-    NO_INVADERS = 2 # Nombre d'aliens  
+    NO_INVADERS = 5 # Nombre d'aliens  
     
     def __init__(self, display : bool = False):
         # player
@@ -104,8 +104,8 @@ class SpaceInvaders():
         direction = int((self.invader_Xchange[minInvY])/abs(int(self.invader_Xchange[minInvY])))
         if direction<0:
             direction =0
-        print("direction s: ", direction)
-        print("distance s: ", distance)
+        #print("direction s: ", direction)
+        #print("distance s: ", distance)
 
         self.state = (distance, direction)
         #[carré vertical invader, carré horizontal invader, carré horizontal player, direction invader]
@@ -128,9 +128,9 @@ class SpaceInvaders():
         self.invader_Ychange = []
         for _ in range(SpaceInvaders.NO_INVADERS):
             self.invaderImage.append(pygame.image.load(getURL('data/alien.png')))
-            self.invader_X.append(random.randint(65, 730))
+            self.invader_X.append(random.randint(150, 450))
             self.invader_Y.append(random.randint(30, 180))
-            self.invader_Xchange.append(1.2)
+            self.invader_Xchange.append(2.2)
             self.invader_Ychange.append(50)
 
         # Bullet
@@ -140,7 +140,7 @@ class SpaceInvaders():
         self.bullet_X = 0
         self.bullet_Y = 500
         self.bullet_Xchange = 0
-        self.bullet_Ychange = 3
+        self.bullet_Ychange = 5
         self.bullet_state = "rest"
 
         if self.display:
@@ -187,12 +187,14 @@ class SpaceInvaders():
         # movement of the invader
         for i in range(SpaceInvaders.NO_INVADERS):
             
-            if self.invader_Y[i] >= 450:
+            if self.invader_Y[i] >= 500:
                 if abs(self.player_X-self.invader_X[i]) < 80:
                     for j in range(SpaceInvaders.NO_INVADERS):
                         self.invader_Y[j] = 2000
                     is_done = True
                     break
+                self.game_over()
+                is_done = True
                 
             if self.invader_X[i] >= 735 or self.invader_X[i] <= 0:
                 self.invader_Xchange[i] *= -1
@@ -200,7 +202,7 @@ class SpaceInvaders():
             # Collision
             collision = self.isCollision(self.bullet_X, self.invader_X[i], self.bullet_Y, self.invader_Y[i])
             if collision:
-                reward = 1
+                reward += 1
                 self.score_val += 1
                 self.bullet_Y = 600
                 self.bullet_state = "rest"
@@ -221,7 +223,7 @@ class SpaceInvaders():
         if self.display:
             self.render()
     
-        return self.get_state(), reward, is_done
+        return self.get_state(), reward, is_done, self.score_val
 
     def render(self):
         self.show_score(self.scoreX, self.scoreY)
