@@ -120,9 +120,9 @@ class SpaceInvaders():
         self.invader_Ychange = []
         for _ in range(SpaceInvaders.NO_INVADERS):
             self.invaderImage.append(pygame.image.load(getURL('data/alien.png')))
-            self.invader_X.append(random.randint(100, 450))
+            self.invader_X.append(random.randint(150, 450))
             self.invader_Y.append(random.randint(30, 180))
-            self.invader_Xchange.append(5.2)
+            self.invader_Xchange.append(3.2)
             self.invader_Ychange.append(50)
 
         # Bullet
@@ -132,7 +132,7 @@ class SpaceInvaders():
         self.bullet_X = 0
         self.bullet_Y = 500
         self.bullet_Xchange = 0
-        self.bullet_Ychange = 15
+        self.bullet_Ychange = 5
         self.bullet_state = "rest"
 
         if self.display:
@@ -151,9 +151,9 @@ class SpaceInvaders():
         self.screen.fill((0, 0, 0))
         # Controling the player movement from the arrow keys
         if action == 0: # GO LEFT
-            self.player_Xchange = -2.7
+            self.player_Xchange = -1.7
         if action == 1: # GO RIGHT
-            self.player_Xchange = 2.7
+            self.player_Xchange = 1.7
         if action == 2: # FIRE
             self.player_Xchange = 0
             # Fixing the change of direction of bullet

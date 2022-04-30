@@ -14,7 +14,7 @@ def main():
 
 
     gamma= 1.
-    alpha = 0.01
+    alpha = 0.001
     eps_profile = EpsilonProfile(1.0, 0.1)
     n_episodes = 100
     max_steps = 10000

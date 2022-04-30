@@ -100,7 +100,8 @@ class agent1():
 
             # Sauvegarde et affiche les données d'apprentissage
             if n_episodes >= 0:
-                print("#> Ep. {}/{} Value {}".format(episode, n_episodes, score_val))
+                #print("#> Ep. {}/{} Value {}".format(episode, n_episodes, score_val))
+                print(score_val)
                 state = env.reset()
                 self.save_log(env, episode)
 
