@@ -102,13 +102,13 @@ class SpaceInvaders():
 
         #print("paso horizontal", space.playerImage.get_width()+1.7)
         direction = int((self.invader_Xchange[minInvY])/abs(int(self.invader_Xchange[minInvY])))
+        
+        #on met la direction entre 0 et 1 pour eviter les bugs (0 étant une direction et 1 une autre; 0 étant normalement -1)
         if direction<0:
             direction =0
-        #print("direction s: ", direction)
-        #print("distance s: ", distance)
 
         self.state = (distance, direction)
-        #[carré vertical invader, carré horizontal invader, carré horizontal player, direction invader]
+        #[carré invader, direction invader]
         return self.state
 
     def reset(self):
@@ -128,8 +128,10 @@ class SpaceInvaders():
         self.invader_Ychange = []
         for _ in range(SpaceInvaders.NO_INVADERS):
             self.invaderImage.append(pygame.image.load(getURL('data/alien.png')))
+            #on a grandement réduit la fenêtre d'apparition pour éviter le bug de l'alien qui spawn out of bounds
             self.invader_X.append(random.randint(150, 450))
             self.invader_Y.append(random.randint(30, 180))
+            #on a légérement augmenté la vitesse de l'alien pour accelerer le jeu
             self.invader_Xchange.append(2.2)
             self.invader_Ychange.append(50)
 
@@ -140,6 +142,7 @@ class SpaceInvaders():
         self.bullet_X = 0
         self.bullet_Y = 500
         self.bullet_Xchange = 0
+        #on a légérement augmenté la vitesse de la balle pour accelerer le jeu
         self.bullet_Ychange = 5
         self.bullet_state = "rest"
 
